@@ -30,13 +30,13 @@ function initObserver() {
 function replaceImages(tagName, node) {
     var objects;
     if (node) {
-      if (node.querySelectorAll) {
-        objects = [ node, ...node.querySelectorAll(tagName) ];
-      } else {
-        objects = [ node ]
-      }
+        if (node.querySelectorAll) {
+            objects = [ node, ...node.querySelectorAll(tagName) ];
+        } else {
+            objects = [ node ];
+        }
     } else {
-      objects = document.getElementsByTagName(tagName);
+        objects = document.getElementsByTagName(tagName);
     }
     var imageSrcs = [
         'https://pbs.twimg.com/media/C46fOL7VcAAM4H-.jpg',
