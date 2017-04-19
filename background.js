@@ -1,6 +1,7 @@
 // ref: http://stackoverflow.com/questions/18740932
 
 var disabled = false;
+chrome.browserAction.setIcon({path: 'icon.png'});
 
 chrome.browserAction.onClicked.addListener(function(tab) {
     chrome.browserAction.setPopup({popup: ''});
