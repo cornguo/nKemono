@@ -37,7 +37,7 @@ function replaceImages(tagName) {
         "https://pbs.twimg.com/media/C2h5XxQUQAALHkl.jpg"
     ];
     for (var i = 0; i < objects.length; i++) {
-        imgSrc = imageSrcs[Math.floor(Math.random()*imageSrcs.length)]
+        var imgSrc = imageSrcs[Math.floor(Math.random()*imageSrcs.length)];
         object = objects[i];
         if (object.src) {
             if (object.srcset) {
