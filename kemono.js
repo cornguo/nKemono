@@ -67,17 +67,23 @@ function replaceImages(selector, node) {
                     if (object.offsetWidth > 0) {
                         object.style.width = object.offsetWidth + 'px';
                     } else {
-                        object.style.width = '100%';
+                        if (!object.style.width) {
+                            object.style.width = '100%';
+                        }
                     }
                 }
                 if (!object.outerHTML.match('height=')) {
                     if (object.offsetHeight > 0) {
                         object.style.height = object.offsetHeight + 'px';
                     } else {
-                        object.style.height = 'auto';
+                        if (!object.style.height) {
+                            object.style.height = 'auto';
+                        }
                     }
                 }
-                object.style.objectFit = 'cover';
+                if (!object.style.objectFit) {
+                    object.style.objectFit = 'cover';
+                }
             }
             object.src = imgSrc;
         } else if (object.style && undefined !== object.style.backgroundImage && '' !== object.style.backgroundImage) {
