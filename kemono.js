@@ -2,10 +2,7 @@
     // kemono
     chrome.runtime.sendMessage({msg: 'getDisabled'}, function(response) {
         if (!response.disabled) {
-            replaceImages('img');
-            replaceImages('a');
-            replaceImages('figure');
-            replaceImages('div');
+            replaceImages('img, a, figure, div');
             var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
             var observer = new MutationObserver(function (mutations) {
                 mutations.forEach(function (mutation) {
@@ -23,16 +20,16 @@
     });
 })();
 
-function replaceImages(tagName, node) {
+function replaceImages(selector, node) {
     var objects;
     if (node) {
         if (node.querySelectorAll) {
-            objects = [ node, ...node.querySelectorAll(tagName) ];
+            objects = [ node, ...node.querySelectorAll(selector) ];
         } else {
             objects = [ node ];
         }
     } else {
-        objects = document.getElementsByTagName(tagName);
+        objects = document.querySelectorAll(selector);
     }
     var imageSrcs = [
         'https://pbs.twimg.com/media/C46fOL7VcAAM4H-.jpg',
