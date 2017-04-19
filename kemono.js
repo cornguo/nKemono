@@ -15,9 +15,13 @@ function initObserver() {
     var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
     var observer = new MutationObserver(function (mutations) {
         mutations.forEach(function (mutation) {
-            mutation.addedNodes.forEach(function (node) {
-                replaceImages('img, a, figure, div', node);
-            });
+            if (mutation.addedNodes && mutation.addedNodes.length > 0) {
+                mutation.addedNodes.forEach(function (node) {
+                    if (node) {
+                        replaceImages('img, a, figure, div', node);
+                    }
+                });
+            }
         });
     });
     observer.observe(document.body, { childList: true, subtree: true });
@@ -26,7 +30,11 @@ function initObserver() {
 function replaceImages(tagName, node) {
     var objects;
     if (node) {
-      objects = node.querySelectorAll(tagName);
+      if (node.querySelectorAll) {
+        objects = [ node, ...node.querySelectorAll(tagName) ];
+      } else {
+        objects = [ node ]
+      }
     } else {
       objects = document.getElementsByTagName(tagName);
     }
@@ -61,23 +69,25 @@ function replaceImages(tagName, node) {
             if (object.srcset) {
                 object.srcset = imgSrc;
             }
-            if (!object.outerHTML.match('width=')) {
-                if (object.offsetWidth > 0) {
-                    object.style.width = object.offsetWidth + 'px';
-                } else {
-                    object.style.width = '100%';
+            if (object.style) {
+                if (!object.outerHTML.match('width=')) {
+                    if (object.offsetWidth > 0) {
+                        object.style.width = object.offsetWidth + 'px';
+                    } else {
+                        object.style.width = '100%';
+                    }
                 }
-            }
-            if (!object.outerHTML.match('height=')) {
-                if (object.offsetHeight > 0) {
-                    object.style.height = object.offsetHeight + 'px';
-                } else {
-                    object.style.height = 'auto';
+                if (!object.outerHTML.match('height=')) {
+                    if (object.offsetHeight > 0) {
+                        object.style.height = object.offsetHeight + 'px';
+                    } else {
+                        object.style.height = 'auto';
+                    }
                 }
+                object.style.objectFit = 'cover';
             }
-            object.style.objectFit = 'cover';
             object.src = imgSrc;
-        } else if (undefined !== object.style.backgroundImage && '' !== object.style.backgroundImage) {
+        } else if (object.style && undefined !== object.style.backgroundImage && '' !== object.style.backgroundImage) {
             object.style.backgroundImage = "url('" + imgSrc + "')";
             object.style.backgroundPosition = 'center';
         }
