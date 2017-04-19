@@ -64,8 +64,8 @@ function replaceImages(selector, node) {
             }
             if (object.style) {
                 if (!object.outerHTML.match('width=')) {
-                    if (object.offsetWidth > 0) {
-                        object.style.width = object.offsetWidth + 'px';
+                    if (object.clientWidth > 0) {
+                        object.style.width = object.clientWidth + 'px';
                     } else {
                         if (!object.style.width) {
                             object.style.width = '100%';
@@ -73,8 +73,8 @@ function replaceImages(selector, node) {
                     }
                 }
                 if (!object.outerHTML.match('height=')) {
-                    if (object.offsetHeight > 0) {
-                        object.style.height = object.offsetHeight + 'px';
+                    if (object.clientHeight > 0) {
+                        object.style.height = object.clientHeight + 'px';
                     } else {
                         if (!object.style.height) {
                             object.style.height = 'auto';
