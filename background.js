@@ -3,18 +3,18 @@
 var disabled = false;
 
 chrome.browserAction.onClicked.addListener(function(tab) {
-    chrome.browserAction.setPopup({popup: ""});
+    chrome.browserAction.setPopup({popup: ''});
     if (!disabled) {
-        chrome.browserAction.setIcon({path: "icon-off.png"});
+        chrome.browserAction.setIcon({path: 'icon-off.png'});
         disabled = true;
     } else {
-        chrome.browserAction.setIcon({path: "icon.png"});
+        chrome.browserAction.setIcon({path: 'icon.png'});
         disabled = false;
     }
 });
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    if (request.msg == "getDisabled") {
+    if ('getDisabled' === request.msg) {
         sendResponse({disabled: disabled});
         return true;
     }
