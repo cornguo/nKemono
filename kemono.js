@@ -6,12 +6,30 @@
             replaceImages('a');
             replaceImages('figure');
             replaceImages('div');
+            initObserver();
         }
     });
 })();
 
-function replaceImages(tagName) {
-    objects = document.getElementsByTagName(tagName);
+function initObserver() {
+    var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+    var observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+            mutation.addedNodes.forEach(function (node) {
+                replaceImages('img, a, figure, div', node);
+            });
+        });
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+}
+
+function replaceImages(tagName, node) {
+    var objects;
+    if (node) {
+      objects = node.querySelectorAll(tagName);
+    } else {
+      objects = document.getElementsByTagName(tagName);
+    }
     var imageSrcs = [
         'https://pbs.twimg.com/media/C46fOL7VcAAM4H-.jpg',
         'https://pbs.twimg.com/media/C5cdRXyUoAEQ8HK.jpg',
@@ -38,7 +56,7 @@ function replaceImages(tagName) {
     ];
     for (var i = 0; i < objects.length; i++) {
         var imgSrc = imageSrcs[Math.floor(Math.random()*imageSrcs.length)];
-        object = objects[i];
+        var object = objects[i];
         if (object.src) {
             if (object.srcset) {
                 object.srcset = imgSrc;
