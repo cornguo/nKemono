@@ -6,26 +6,22 @@
             replaceImages('a');
             replaceImages('figure');
             replaceImages('div');
-            initObserver();
+            var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+            var observer = new MutationObserver(function (mutations) {
+                mutations.forEach(function (mutation) {
+                    if (mutation.addedNodes && mutation.addedNodes.length > 0) {
+                        mutation.addedNodes.forEach(function (node) {
+                            if (node) {
+                                replaceImages('img, a, figure, div', node);
+                            }
+                        });
+                    }
+                });
+            });
+            observer.observe(document.body, { childList: true, subtree: true });
         }
     });
 })();
-
-function initObserver() {
-    var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-    var observer = new MutationObserver(function (mutations) {
-        mutations.forEach(function (mutation) {
-            if (mutation.addedNodes && mutation.addedNodes.length > 0) {
-                mutation.addedNodes.forEach(function (node) {
-                    if (node) {
-                        replaceImages('img, a, figure, div', node);
-                    }
-                });
-            }
-        });
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
-}
 
 function replaceImages(tagName, node) {
     var objects;
