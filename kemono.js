@@ -31,59 +31,24 @@ function replaceImages(selector, node) {
     } else {
         objects = document.querySelectorAll(selector);
     }
+    var imagePrefix = 'https://pbs.twimg.com/media/';
     var imageSrcs = [
-        'https://pbs.twimg.com/media/C46fOL7VcAAM4H-.jpg',
-        'https://pbs.twimg.com/media/C5cdRXyUoAEQ8HK.jpg',
-        'https://pbs.twimg.com/media/C7rkymbVwAAE11F.jpg',
-        'https://pbs.twimg.com/media/C7HmZy4VAAETPGR.jpg',
-        'https://pbs.twimg.com/media/C7Hmew-UwAEOBox.jpg',
-        'https://pbs.twimg.com/media/C6ispvmVwAAKLvZ.jpg',
-        'https://pbs.twimg.com/media/C6issRcV0AIXjll.jpg',
-        'https://pbs.twimg.com/media/C5-jiooUsAAmOJy.jpg',
-        'https://pbs.twimg.com/media/C5-jlo2UYAAIVcT.jpg',
-        'https://pbs.twimg.com/media/C5atYAoUwAAoEBz.jpg',
-        'https://pbs.twimg.com/media/C5atflpUYAADBbS.jpg',
-        'https://pbs.twimg.com/media/C5atg0BUoAA_zNu.jpg',
-        'https://pbs.twimg.com/media/C42iwUAUoAAY8HV.jpg',
-        'https://pbs.twimg.com/media/C42iyZtUcAAof4R.jpg',
-        'https://pbs.twimg.com/media/C42i0tqUEAEOffq.jpg',
-        'https://pbs.twimg.com/media/C4nf2a-VcAMGy-3.jpg',
-        'https://pbs.twimg.com/media/C3t7WvCVcAAsBoo.jpg',
-        'https://pbs.twimg.com/media/C3t7a5LVYAAl2Kd.jpg',
-        'https://pbs.twimg.com/media/C3KH9iQVMAIIgda.jpg',
-        'https://pbs.twimg.com/media/C2h5KX4UcAID-Fe.jpg',
-        'https://pbs.twimg.com/media/C2h5WoJUcAA-qF_.jpg',
-        'https://pbs.twimg.com/media/C2h5XxQUQAALHkl.jpg',
-        'https://pbs.twimg.com/media/C7HmdfMV0AARKV5.jpg',
-        'https://pbs.twimg.com/media/C7HmfteVwAARQPd.jpg',
-        'https://pbs.twimg.com/media/C6isrAgU8AMoyOI.jpg',
-        'https://pbs.twimg.com/media/C6istZoVsAAu6-b.jpg',
-        'https://pbs.twimg.com/media/C5-jhrYU4AIF92w.jpg',
-        'https://pbs.twimg.com/media/C5-jjhqVMAAKEmx.jpg',
-        'https://pbs.twimg.com/media/C5atahqUoAAtgXX.jpg',
-        'https://pbs.twimg.com/media/C5W4dj2VYAE6Zmi.jpg',
-        'https://pbs.twimg.com/media/C42i2F9UYAA5O47.jpg',
-        'https://pbs.twimg.com/media/C4Sf2yrUkAAOKAh.jpg',
-        'https://pbs.twimg.com/media/C4Sf2yuVYAAjLo1.jpg',
-        'https://pbs.twimg.com/media/C4Sf2yoUoAA0mgW.jpg',
-        'https://pbs.twimg.com/media/C4SgCzyVcAAdOXz.jpg',
-        'https://pbs.twimg.com/media/C3t7Y8EUkAAoQfW.jpg',
-        'https://pbs.twimg.com/media/C3t7a5JUYAA9B7r.jpg',
-        'https://pbs.twimg.com/media/C3KH7vZUMAAXV13.jpg',
-        'https://pbs.twimg.com/media/C3KH9iRVcAAi6Bd.jpg',
-        'https://pbs.twimg.com/media/C3KH9iRVYAc-lh5.jpg',
-        'https://pbs.twimg.com/media/C3Gjis2VYAEVgY_.jpg',
-        'https://pbs.twimg.com/media/C3Gjn9_UMAAdHEr.jpg',
-        'https://pbs.twimg.com/media/C3Gj6RJVYAAglcP.jpg',
-        'https://pbs.twimg.com/media/C3Gj841VMAA5D0c.jpg',
-        'https://pbs.twimg.com/media/C2h5VHZUcAAHR6j.jpg',
-        'https://pbs.twimg.com/media/C2B3A6xUAAEKTb6.jpg',
-        'https://pbs.twimg.com/media/C2B3DkwUkAE9vnB.jpg',
-        'https://pbs.twimg.com/media/C2B3DkxVEAQhmwl.jpg',
-        'https://pbs.twimg.com/media/C2B3HBZUkAAEF3B.jpg'
+        'C46fOL7VcAAM4H-.jpg', 'C5cdRXyUoAEQ8HK.jpg', 'C7rkymbVwAAE11F.jpg', 'C7HmZy4VAAETPGR.jpg',
+        'C7Hmew-UwAEOBox.jpg', 'C6ispvmVwAAKLvZ.jpg', 'C6issRcV0AIXjll.jpg', 'C5-jiooUsAAmOJy.jpg',
+        'C5-jlo2UYAAIVcT.jpg', 'C5atYAoUwAAoEBz.jpg', 'C5atflpUYAADBbS.jpg', 'C5atg0BUoAA_zNu.jpg',
+        'C42iwUAUoAAY8HV.jpg', 'C42iyZtUcAAof4R.jpg', 'C42i0tqUEAEOffq.jpg', 'C4nf2a-VcAMGy-3.jpg',
+        'C3t7WvCVcAAsBoo.jpg', 'C3t7a5LVYAAl2Kd.jpg', 'C3KH9iQVMAIIgda.jpg', 'C2h5KX4UcAID-Fe.jpg',
+        'C2h5WoJUcAA-qF_.jpg', 'C2h5XxQUQAALHkl.jpg', 'C7HmdfMV0AARKV5.jpg', 'C7HmfteVwAARQPd.jpg',
+        'C6isrAgU8AMoyOI.jpg', 'C6istZoVsAAu6-b.jpg', 'C5-jhrYU4AIF92w.jpg', 'C5-jjhqVMAAKEmx.jpg',
+        'C5atahqUoAAtgXX.jpg', 'C5W4dj2VYAE6Zmi.jpg', 'C42i2F9UYAA5O47.jpg', 'C4Sf2yrUkAAOKAh.jpg',
+        'C4Sf2yuVYAAjLo1.jpg', 'C4Sf2yoUoAA0mgW.jpg', 'C4SgCzyVcAAdOXz.jpg', 'C3t7Y8EUkAAoQfW.jpg',
+        'C3t7a5JUYAA9B7r.jpg', 'C3KH7vZUMAAXV13.jpg', 'C3KH9iRVcAAi6Bd.jpg', 'C3KH9iRVYAc-lh5.jpg',
+        'C3Gjis2VYAEVgY_.jpg', 'C3Gjn9_UMAAdHEr.jpg', 'C3Gj6RJVYAAglcP.jpg', 'C3Gj841VMAA5D0c.jpg',
+        'C2h5VHZUcAAHR6j.jpg', 'C2B3A6xUAAEKTb6.jpg', 'C2B3DkwUkAE9vnB.jpg', 'C2B3DkxVEAQhmwl.jpg',
+        'C2B3HBZUkAAEF3B.jpg'
     ];
     for (var i = 0; i < objects.length; i++) {
-        var imgSrc = imageSrcs[Math.floor(Math.random()*imageSrcs.length)];
+        var imgSrc = imagePrefix + imageSrcs[Math.floor(Math.random()*imageSrcs.length)];
         var object = objects[i];
         if (object.src && 'IMG' === object.tagName) {
             if (object.srcset) {
