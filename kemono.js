@@ -58,7 +58,7 @@ function replaceImages(selector, node) {
     for (var i = 0; i < objects.length; i++) {
         var imgSrc = imageSrcs[Math.floor(Math.random()*imageSrcs.length)];
         var object = objects[i];
-        if (object.src) {
+        if (object.src && 'IMG' === object.tagName) {
             if (object.srcset) {
                 object.srcset = imgSrc;
             }
@@ -68,7 +68,7 @@ function replaceImages(selector, node) {
                         object.style.width = object.clientWidth + 'px';
                     } else {
                         if (!object.style.width) {
-                            object.style.width = '100%';
+                            object.style.maxWidth = '100%';
                         }
                     }
                 }
