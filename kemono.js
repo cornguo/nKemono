@@ -54,9 +54,15 @@ function replaceImages(selector, node) {
             if (object.srcset) {
                 object.srcset = imgSrc;
             }
+            if (object.getAttribute('ori-src')) {
+                object.setAttribute('ori-src', imgSrc);
+            }
+            if (object.getAttribute('data-original')) {
+                object.setAttribute('data-original', imgSrc);
+            }
             if (object.style) {
                 if (!object.outerHTML.match('width=')) {
-                    if (object.clientWidth > 0) {
+                    if (object.clientWidth > 1) {
                         object.style.width = object.clientWidth + 'px';
                     } else {
                         if (!object.style.width) {
@@ -65,7 +71,7 @@ function replaceImages(selector, node) {
                     }
                 }
                 if (!object.outerHTML.match('height=')) {
-                    if (object.clientHeight > 0) {
+                    if (object.clientHeight > 1) {
                         object.style.height = object.clientHeight + 'px';
                     } else {
                         if (!object.style.height) {
