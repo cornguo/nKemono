@@ -1,24 +1,54 @@
-(function() {
+var observer;
+var domSelector = 'img:not([kemono-injected]), a:not([kemono-injected]), figure:not([kemono-injected]), div:not([kemono-injected])';
+
+function createObserver () {
+   return new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+            if (mutation.addedNodes && mutation.addedNodes.length > 0 ) {
+                mutation.addedNodes.forEach(function (node) {
+                    if (node) {
+                        replaceImages(domSelector, node);
+                    }
+                });
+            }
+        });
+
+        observer.disconnect();
+        runObserver();
+    });
+}
+
+
+function runObserver () {
     // kemono
     chrome.runtime.sendMessage({msg: 'getDisabled'}, function(response) {
         if (!response.disabled) {
-            replaceImages('img, a, figure, div');
+            replaceImages(domSelector);
             var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-            var observer = new MutationObserver(function (mutations) {
-                mutations.forEach(function (mutation) {
-                    if (mutation.addedNodes && mutation.addedNodes.length > 0) {
-                        mutation.addedNodes.forEach(function (node) {
-                            if (node) {
-                                replaceImages('img, a, figure, div', node);
-                            }
-                        });
-                    }
-                });
-            });
+            observer = createObserver();
             observer.observe(document.body, { childList: true, subtree: true });
         }
     });
-})();
+};
+runObserver();
+
+function createWrapperDiv(width, height, imageUrl) {
+    var wrapperDiv = document.createElement('div');
+    wrapperDiv.style.position = 'relative';
+    wrapperDiv.style.display = 'table-caption';
+    wrapperDiv.style.width = width + 'px';
+    wrapperDiv.style.height = height + 'px';
+    wrapperDiv.style.backgroundImage = 'url(' + imageUrl + ')'
+    wrapperDiv.style.backgroundPosition = 'center';
+    wrapperDiv.style.backgroundSize = 'cover';
+    wrapperDiv.setAttribute('kemono-injected', '');
+    return wrapperDiv;
+}
+
+function wrapDiv(el, wrapper) {
+    el.parentNode.insertBefore(wrapper, el);
+    wrapper.appendChild(el);
+}
 
 function replaceImages(selector, node) {
     var objects;
@@ -50,7 +80,23 @@ function replaceImages(selector, node) {
     for (var i = 0; i < objects.length; i++) {
         var imgSrc = imagePrefix + imageSrcs[Math.floor(Math.random()*imageSrcs.length)];
         var object = objects[i];
+
+        if (typeof object.setAttribute === 'function') {
+            object.setAttribute('kemono-injected', '');
+        }
+
         if (object.src && 'IMG' === object.tagName) {
+            var wrapElement = createWrapperDiv(object.clientWidth, object.clientHeight, imgSrc);
+            object.style.display = 'inline-block';
+            object.style.position = 'absolute';
+            object.style.width = '100%';
+            object.style.height = '100%';
+            object.style.right = null;
+            object.style.bottom = null;
+            object.style.top = 0;
+            object.style.left = 0;
+            wrapDiv(object, wrapElement);
+
             if (object.srcset) {
                 object.srcset = imgSrc;
             }
@@ -83,7 +129,6 @@ function replaceImages(selector, node) {
                     object.style.objectFit = 'cover';
                 }
             }
-            object.src = imgSrc;
         } else if (object.style && undefined !== object.style.backgroundImage && '' !== object.style.backgroundImage) {
             object.style.backgroundImage = "url('" + imgSrc + "')";
             object.style.backgroundPosition = 'center';

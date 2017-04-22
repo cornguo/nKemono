@@ -1,0 +1,11 @@
+div[kemono-injected] > img {
+  visibility: hidden;
+}
+
+div[kemono-injected]:hover > img {
+  visibility: visible;
+}
+
+div[kemono-injected]:hover {
+  background-image: none !important;
+}
