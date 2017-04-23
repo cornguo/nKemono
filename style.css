@@ -1,17 +1,17 @@
 div[kemono-injected] > img {
-  visibility: hidden;
+    visibility: hidden;
 }
 
 div[kemono-injected]:hover > img {
-  visibility: visible;
+    visibility: visible;
 }
 
 .kemono-wrapper {
-  display: inline-block;
-  background-size: cover;
-  background-position: center;
+    display: inline-block;
+    background-size: cover;
+    background-position: center;
 }
 
 .kemono-wrapper:hover {
-  background-image: none!important;
+    background-image: none!important;
 }

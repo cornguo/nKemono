@@ -82,7 +82,7 @@ function replaceImages(selector, node) {
         var imgSrc = imagePrefix + imageSrcs[Math.floor(Math.random()*imageSrcs.length)];
         var object = objects[i];
 
-        if (typeof object.setAttribute === 'function') {
+        if ('function' === typeof object.setAttribute) {
             object.setAttribute('kemono-injected', '');
         }
 
