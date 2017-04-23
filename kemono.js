@@ -18,7 +18,6 @@ function createObserver () {
     });
 }
 
-
 function runObserver () {
     // kemono
     chrome.runtime.sendMessage({msg: 'getDisabled'}, function(response) {
