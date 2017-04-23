@@ -34,18 +34,15 @@ runObserver();
 
 function createWrapperDiv(width, height, imageUrl) {
     var wrapperDiv = document.createElement('div');
-    wrapperDiv.style.position = 'relative';
-    wrapperDiv.style.display = 'table-caption';
     if (width > 0) {
         wrapperDiv.style.width = width + 'px';
     }
     if (height > 0) {
         wrapperDiv.style.height = height + 'px';
     }
-    wrapperDiv.style.backgroundImage = 'url(' + imageUrl + ')'
-    wrapperDiv.style.backgroundPosition = 'center';
-    wrapperDiv.style.backgroundSize = 'cover';
+    wrapperDiv.style.backgroundImage = "url('" + imageUrl + "')";
     wrapperDiv.setAttribute('kemono-injected', '');
+    wrapperDiv.classList.add('kemono-wrapper');
     return wrapperDiv;
 }
 
@@ -119,20 +116,24 @@ function replaceImages(selector, node) {
             // and now image is wrapped, set width to the width of its wrapper
             object.style.width = '100%';
         } else if (object.style && undefined !== object.style.backgroundImage && '' !== object.style.backgroundImage) {
-            object.setAttribute('kemono-orig-bgimg', object.style.backgroundImage);
-            object.setAttribute('kemono-orig-bgpos', object.style.backgrounPosition);
-            object.setAttribute('kemono-bgimg', "url('" + imgSrc + "')");
-            object.setAttribute('kemono-bgpos', 'center');
-            object.onmouseover = function () {
-                this.style.backgroundImage = this.getAttribute('kemono-orig-bgimg');
-                this.style.backgroundImage = this.getAttribute('kemono-orig-bgpos');
-            };
-            object.onmouseout = function () {
-                this.style.backgroundImage = this.getAttribute('kemono-bgimg');
-                this.style.backgroundImage = this.getAttribute('kemono-bgpos');
+            if (object.classList.contains('kemono-wrapper')) {
+                continue;
+            } else {
+                object.setAttribute('kemono-orig-bgimg', object.style.backgroundImage);
+                object.setAttribute('kemono-orig-bgpos', object.style.backgrounPosition);
+                object.setAttribute('kemono-bgimg', "url('" + imgSrc + "')");
+                object.setAttribute('kemono-bgpos', 'center');
+                object.onmouseover = function () {
+                    this.style.backgroundImage = this.getAttribute('kemono-orig-bgimg');
+                    this.style.backgroundImage = this.getAttribute('kemono-orig-bgpos');
+                };
+                object.onmouseout = function () {
+                    this.style.backgroundImage = this.getAttribute('kemono-bgimg');
+                    this.style.backgroundImage = this.getAttribute('kemono-bgpos');
+                }
+                object.style.backgroundImage = object.getAttribute('kemono-bgimg');
+                object.style.backgroundImage = object.getAttribute('kemono-bgpos');
             }
-            object.style.backgroundImage = object.getAttribute('kemono-bgimg');
-            object.style.backgroundImage = object.getAttribute('kemono-bgpos');
         }
     }
 }

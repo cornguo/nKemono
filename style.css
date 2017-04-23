@@ -6,6 +6,12 @@ div[kemono-injected]:hover > img {
   visibility: visible;
 }
 
-div[kemono-injected]:hover {
-  background-image: none !important;
+.kemono-wrapper {
+  display: inline-block;
+  background-size: cover;
+  background-position: center;
+}
+
+.kemono-wrapper:hover {
+  background-image: none!important;
 }
