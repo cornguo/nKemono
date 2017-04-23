@@ -36,8 +36,12 @@ function createWrapperDiv(width, height, imageUrl) {
     var wrapperDiv = document.createElement('div');
     wrapperDiv.style.position = 'relative';
     wrapperDiv.style.display = 'table-caption';
-    wrapperDiv.style.width = width + 'px';
-    wrapperDiv.style.height = height + 'px';
+    if (width > 0) {
+        wrapperDiv.style.width = width + 'px';
+    }
+    if (height > 0) {
+        wrapperDiv.style.height = height + 'px';
+    }
     wrapperDiv.style.backgroundImage = 'url(' + imageUrl + ')'
     wrapperDiv.style.backgroundPosition = 'center';
     wrapperDiv.style.backgroundSize = 'cover';
@@ -86,17 +90,7 @@ function replaceImages(selector, node) {
         }
 
         if (object.src && 'IMG' === object.tagName) {
-            var wrapElement = createWrapperDiv(object.clientWidth, object.clientHeight, imgSrc);
-            object.style.display = 'inline-block';
-            object.style.position = 'absolute';
-            object.style.width = '100%';
-            object.style.height = '100%';
-            object.style.right = null;
-            object.style.bottom = null;
-            object.style.top = 0;
-            object.style.left = 0;
-            wrapDiv(object, wrapElement);
-
+            // adjust width & height before wrap it
             if (object.srcset) {
                 object.srcset = imgSrc;
             }
@@ -129,6 +123,10 @@ function replaceImages(selector, node) {
                     object.style.objectFit = 'cover';
                 }
             }
+            var wrapElement = createWrapperDiv(object.clientWidth, object.clientHeight, imgSrc);
+            wrapDiv(object, wrapElement);
+            // and now image is wrapped, set width to the width of its wrapper
+            object.style.width = '100%';
         } else if (object.style && undefined !== object.style.backgroundImage && '' !== object.style.backgroundImage) {
             object.setAttribute('kemono-orig-bgimg', object.style.backgroundImage);
             object.setAttribute('kemono-orig-bgpos', object.style.backgrounPosition);
