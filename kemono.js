@@ -69,13 +69,16 @@ function replaceImages(selector, node) {
         if (object.src && 'IMG' === object.tagName) {
             // adjust width & height before replace it
             if (object.srcset) {
-                object.srcset = imgSrc;
+                object.removeAttribute('srcset');
             }
             if (object.getAttribute('ori-src')) {
-                object.setAttribute('ori-src', imgSrc);
+                object.removeAttribute('ori-src');
             }
             if (object.getAttribute('data-original')) {
-                object.setAttribute('data-original', imgSrc);
+                object.removeAttribute('data-original');
+            }
+            if (object.getAttribute('data-orig-file')) {
+                object.removeAttribute('data-orig-file');
             }
             if (object.style) {
                 if (!object.outerHTML.match('width=')) {
@@ -86,6 +89,10 @@ function replaceImages(selector, node) {
                             object.style.maxWidth = '100%';
                         }
                     }
+                } else {
+                    if (object.width > 2) {
+                        object.style.width = object.width + 'px';
+                    }
                 }
                 if (!object.outerHTML.match('height=')) {
                     if (object.clientHeight > 1) {
@@ -94,6 +101,10 @@ function replaceImages(selector, node) {
                         if (!object.style.height) {
                             object.style.height = 'auto';
                         }
+                    }
+                } else {
+                    if (object.width > 2) {
+                        object.style.height = object.height + 'px';
                     }
                 }
                 if (!object.style.objectFit) {
