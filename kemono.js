@@ -1,5 +1,5 @@
 var observer;
-var domSelector = 'img:not([kemono-injected]), a:not([kemono-injected]), figure:not([kemono-injected]), div:not([kemono-injected])';
+var domSelector = 'img, a, figure, div';
 
 function createObserver () {
    return new MutationObserver(function (mutations) {
@@ -62,8 +62,8 @@ function replaceImages(selector, node) {
         var imgSrc = imagePrefix + imageSrcs[Math.floor(Math.random()*imageSrcs.length)];
         var object = objects[i];
 
-        if ('function' === typeof object.setAttribute) {
-            object.setAttribute('kemono-injected', '');
+        if (object.classList && object.classList.contains('kemono-injected')) {
+            continue;
         }
 
         if (object.src && 'IMG' === object.tagName) {
@@ -109,25 +109,23 @@ function replaceImages(selector, node) {
                 this.src = this.getAttribute('kemono-src');
             };
             object.src = object.getAttribute('kemono-src');
+            object.classList.add('kemono-injected');
         } else if (object.style && undefined !== object.style.backgroundImage && '' !== object.style.backgroundImage) {
-            if (object.classList.contains('kemono-wrapper')) {
-                continue;
-            } else {
-                object.setAttribute('kemono-orig-bgimg', object.style.backgroundImage);
-                object.setAttribute('kemono-orig-bgpos', object.style.backgrounPosition);
-                object.setAttribute('kemono-bgimg', "url('" + imgSrc + "')");
-                object.setAttribute('kemono-bgpos', 'center');
-                object.onmouseover = function () {
-                    this.style.backgroundImage = this.getAttribute('kemono-orig-bgimg');
-                    this.style.backgroundImage = this.getAttribute('kemono-orig-bgpos');
-                };
-                object.onmouseout = function () {
-                    this.style.backgroundImage = this.getAttribute('kemono-bgimg');
-                    this.style.backgroundImage = this.getAttribute('kemono-bgpos');
-                }
-                object.style.backgroundImage = object.getAttribute('kemono-bgimg');
-                object.style.backgroundImage = object.getAttribute('kemono-bgpos');
-            }
+            object.setAttribute('kemono-orig-bgimg', object.style.backgroundImage);
+            object.setAttribute('kemono-orig-bgpos', object.style.backgrounPosition);
+            object.setAttribute('kemono-bgimg', "url('" + imgSrc + "')");
+            object.setAttribute('kemono-bgpos', 'center');
+            object.onmouseover = function () {
+                this.style.backgroundImage = this.getAttribute('kemono-orig-bgimg');
+                this.style.backgroundImage = this.getAttribute('kemono-orig-bgpos');
+            };
+            object.onmouseout = function () {
+                this.style.backgroundImage = this.getAttribute('kemono-bgimg');
+                this.style.backgroundImage = this.getAttribute('kemono-bgpos');
+            };
+            object.style.backgroundImage = object.getAttribute('kemono-bgimg');
+            object.style.backgroundImage = object.getAttribute('kemono-bgpos');
+            object.classList.add('kemono-injected');
         }
     }
 }
