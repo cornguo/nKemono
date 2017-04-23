@@ -32,41 +32,6 @@ function runObserver () {
 };
 runObserver();
 
-function createWrapperDiv(object, imageUrl) {
-    var wrapperDiv = document.createElement('div');
-    wrapperDiv.setAttribute('style', object.getAttribute('style'));
-    // adjust width & height before wrap it
-    if (object.style) {
-        if (object.clientWidth > 2) {
-            wrapperDiv.style.width = object.clientWidth + 'px';
-        }
-        wrapperDiv.style.maxWidth = '100%';
-        if (object.clientHeight > 2) {
-            wrapperDiv.style.height = object.clientHeight + 'px';
-        } else {
-            if (!object.style.height) {
-                wrapperDiv.style.height = 'auto';
-            }
-        }
-        if (object.outerHTML.match('width=') || object.width > 0) {
-            wrapperDiv.style.width = object.width + 'px';
-            wrapperDiv.style.height = 'auto';
-        }
-        if (object.outerHTML.match('height=') || object.height > 0) {
-            wrapperDiv.style.height = object.height + 'px';
-        }
-    }
-    wrapperDiv.style.backgroundImage = "url('" + imageUrl + "')";
-    wrapperDiv.setAttribute('kemono-injected', '');
-    wrapperDiv.classList.add('kemono-wrapper');
-    return wrapperDiv;
-}
-
-function wrapDiv(el, wrapper) {
-    el.parentNode.insertBefore(wrapper, el);
-    wrapper.appendChild(el);
-}
-
 function replaceImages(selector, node) {
     var objects;
     if (node) {
@@ -103,12 +68,48 @@ function replaceImages(selector, node) {
         }
 
         if (object.src && 'IMG' === object.tagName) {
-            var wrapElement = createWrapperDiv(object, imgSrc);
-            wrapDiv(object, wrapElement);
-            // and now image is wrapped, set width to the width of its wrapper and cleans its style
-            object.setAttribute('style', '');
-            object.style.width = wrapElement.style.width;
-            object.style.height = wrapElement.style.height;
+            // adjust width & height before replace it
+            if (object.srcset) {
+                object.srcset = imgSrc;
+            }
+            if (object.getAttribute('ori-src')) {
+                object.setAttribute('ori-src', imgSrc);
+            }
+            if (object.getAttribute('data-original')) {
+                object.setAttribute('data-original', imgSrc);
+            }
+            if (object.style) {
+                if (!object.outerHTML.match('width=')) {
+                    if (object.clientWidth > 1) {
+                        object.style.width = object.clientWidth + 'px';
+                    } else {
+                        if (!object.style.width) {
+                            object.style.maxWidth = '100%';
+                        }
+                    }
+                }
+                if (!object.outerHTML.match('height=')) {
+                    if (object.clientHeight > 1) {
+                        object.style.height = object.clientHeight + 'px';
+                    } else {
+                        if (!object.style.height) {
+                            object.style.height = 'auto';
+                        }
+                    }
+                }
+                if (!object.style.objectFit) {
+                    object.style.objectFit = 'cover';
+                }
+            }
+            object.setAttribute('kemono-orig-src', object.src);
+            object.setAttribute('kemono-src', imgSrc);
+            object.onmouseover = function () {
+                this.src = this.getAttribute('kemono-orig-src');
+            };
+            object.onmouseout = function () {
+                this.src = this.getAttribute('kemono-src');
+            };
+            object.src = object.getAttribute('kemono-src');
         } else if (object.style && undefined !== object.style.backgroundImage && '' !== object.style.backgroundImage) {
             if (object.classList.contains('kemono-wrapper')) {
                 continue;

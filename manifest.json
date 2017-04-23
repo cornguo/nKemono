@@ -26,9 +26,6 @@
     "js": [
       "kemono.js"
     ],
-    "css": [
-      "style.css"
-    ],
     "run_at": "document_end"
   }]
 }
