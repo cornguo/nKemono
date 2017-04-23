@@ -91,15 +91,6 @@ function replaceImages(selector, node) {
 
         if (object.src && 'IMG' === object.tagName) {
             // adjust width & height before wrap it
-            if (object.srcset) {
-                object.srcset = imgSrc;
-            }
-            if (object.getAttribute('ori-src')) {
-                object.setAttribute('ori-src', imgSrc);
-            }
-            if (object.getAttribute('data-original')) {
-                object.setAttribute('data-original', imgSrc);
-            }
             if (object.style) {
                 if (!object.outerHTML.match('width=')) {
                     if (object.clientWidth > 1) {
