@@ -130,8 +130,20 @@ function replaceImages(selector, node) {
                 }
             }
         } else if (object.style && undefined !== object.style.backgroundImage && '' !== object.style.backgroundImage) {
-            object.style.backgroundImage = "url('" + imgSrc + "')";
-            object.style.backgroundPosition = 'center';
+            object.setAttribute('kemono-orig-bgimg', object.style.backgroundImage);
+            object.setAttribute('kemono-orig-bgpos', object.style.backgrounPosition);
+            object.setAttribute('kemono-bgimg', "url('" + imgSrc + "')");
+            object.setAttribute('kemono-bgpos', 'center');
+            object.onmouseover = function () {
+                this.style.backgroundImage = this.getAttribute('kemono-orig-bgimg');
+                this.style.backgroundImage = this.getAttribute('kemono-orig-bgpos');
+            };
+            object.onmouseout = function () {
+                this.style.backgroundImage = this.getAttribute('kemono-bgimg');
+                this.style.backgroundImage = this.getAttribute('kemono-bgpos');
+            }
+            object.style.backgroundImage = object.getAttribute('kemono-bgimg');
+            object.style.backgroundImage = object.getAttribute('kemono-bgpos');
         }
     }
 }
