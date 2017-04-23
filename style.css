@@ -7,7 +7,7 @@ div[kemono-injected]:hover > img {
 }
 
 .kemono-wrapper {
-    display: inline-block;
+    display: table-caption;
     background-size: cover;
     background-position: center;
 }

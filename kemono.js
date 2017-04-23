@@ -32,13 +32,29 @@ function runObserver () {
 };
 runObserver();
 
-function createWrapperDiv(width, height, imageUrl) {
+function createWrapperDiv(object, imageUrl) {
     var wrapperDiv = document.createElement('div');
-    if (width > 0) {
-        wrapperDiv.style.width = width + 'px';
-    }
-    if (height > 0) {
-        wrapperDiv.style.height = height + 'px';
+    wrapperDiv.setAttribute('style', object.getAttribute('style'));
+    // adjust width & height before wrap it
+    if (object.style) {
+        if (object.clientWidth > 2) {
+            wrapperDiv.style.width = object.clientWidth + 'px';
+        }
+        wrapperDiv.style.maxWidth = '100%';
+        if (object.clientHeight > 2) {
+            wrapperDiv.style.height = object.clientHeight + 'px';
+        } else {
+            if (!object.style.height) {
+                wrapperDiv.style.height = 'auto';
+            }
+        }
+        if (object.outerHTML.match('width=') || object.width > 0) {
+            wrapperDiv.style.width = object.width + 'px';
+            wrapperDiv.style.height = 'auto';
+        }
+        if (object.outerHTML.match('height=') || object.height > 0) {
+            wrapperDiv.style.height = object.height + 'px';
+        }
     }
     wrapperDiv.style.backgroundImage = "url('" + imageUrl + "')";
     wrapperDiv.setAttribute('kemono-injected', '');
@@ -87,34 +103,12 @@ function replaceImages(selector, node) {
         }
 
         if (object.src && 'IMG' === object.tagName) {
-            // adjust width & height before wrap it
-            if (object.style) {
-                if (!object.outerHTML.match('width=')) {
-                    if (object.clientWidth > 1) {
-                        object.style.width = object.clientWidth + 'px';
-                    } else {
-                        if (!object.style.width) {
-                            object.style.maxWidth = '100%';
-                        }
-                    }
-                }
-                if (!object.outerHTML.match('height=')) {
-                    if (object.clientHeight > 1) {
-                        object.style.height = object.clientHeight + 'px';
-                    } else {
-                        if (!object.style.height) {
-                            object.style.height = 'auto';
-                        }
-                    }
-                }
-                if (!object.style.objectFit) {
-                    object.style.objectFit = 'cover';
-                }
-            }
-            var wrapElement = createWrapperDiv(object.clientWidth, object.clientHeight, imgSrc);
+            var wrapElement = createWrapperDiv(object, imgSrc);
             wrapDiv(object, wrapElement);
-            // and now image is wrapped, set width to the width of its wrapper
-            object.style.width = '100%';
+            // and now image is wrapped, set width to the width of its wrapper and cleans its style
+            object.setAttribute('style', '');
+            object.style.width = wrapElement.style.width;
+            object.style.height = wrapElement.style.height;
         } else if (object.style && undefined !== object.style.backgroundImage && '' !== object.style.backgroundImage) {
             if (object.classList.contains('kemono-wrapper')) {
                 continue;
