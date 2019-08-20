@@ -3,7 +3,7 @@
 
   "name": "nKemono",
   "description": "Inspired by nCage.  It replaces all of your images by Kemono Friends",
-  "version": "4.1.2",
+  "version": "4.2",
 
   "background":{
     "scripts": ["background.js"],
