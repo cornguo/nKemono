@@ -14,6 +14,10 @@
     "default_icon": "icon.png"
   },
 
+  "icons": {
+    "128": "icon128.png"
+  },
+
   "permissions": [
     "storage"
   ],
