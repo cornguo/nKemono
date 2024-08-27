@@ -20,14 +20,16 @@ function createObserver () {
 
 function runObserver () {
     // kemono
-    chrome.runtime.sendMessage({msg: 'getDisabled'}, function(response) {
-        if (!response.disabled) {
-            replaceImages(domSelector);
-            var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-            observer = createObserver();
-            observer.observe(document.body, { childList: true, subtree: true });
-        }
-    });
+    if(chrome.runtime?.id) {
+        chrome.runtime.sendMessage({msg: 'getDisabled'}, function(response) {
+            if (!response.disabled) {
+                replaceImages(domSelector);
+                var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+                observer = createObserver();
+                observer.observe(document.body, { childList: true, subtree: true });
+            }
+        });
+    }
 };
 runObserver();
 
